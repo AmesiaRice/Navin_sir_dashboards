@@ -1,12 +1,17 @@
 'use client'
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import mockOrders from '../mock';
 import OrderCard from '../components/OrderCard';
 
 export default function ClientDashboard() {
   const [inputID, setInputID] = useState('');
   const [matchedOrders, setMatchedOrders] = useState([]);
+  const [allOrders, setAllOrders] = useState([]);
   const [error, setError] = useState('');
+
+  useEffect(()=>{
+   setAllOrders(mockOrders)
+  },[])
 
   const handleSearch = () => {
     const search = inputID.trim().toLowerCase();
@@ -25,6 +30,8 @@ export default function ClientDashboard() {
       setError('No orders found for that ID.');
     }
   };
+
+  const dataToDisplay = inputID.trim() && matchedOrders.length>0 ? matchedOrders : allOrders;
 
   return (
     <div className="p-6">
@@ -51,12 +58,9 @@ export default function ClientDashboard() {
       {error && <p className="text-red-600 mb-4">{error}</p>}
 
       {/* ✅ Display All Matching Orders */}
-      {matchedOrders.length > 0 && (
+      {dataToDisplay.length > 0 && (
         <div>
-          <h2 className="text-lg font-semibold mb-2">
-            {matchedOrders.length > 1 ? 'Matching Orders:' : 'Order Details:'}
-          </h2>
-          {matchedOrders.map(order => (
+          {dataToDisplay.map(order => (
             <OrderCard key={order["Order ID"]} order={order} />
           ))}
         </div>
