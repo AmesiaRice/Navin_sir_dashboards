@@ -3,23 +3,26 @@ import React from 'react';
 
 export default function ProgressBar({ steps }) {
   return (
-    <div className="flex text-sm overflow-x-auto gap-2 mt-4">
+    <div className="flex flex-wrap gap-3 mt-4">
       {steps.map((step, i) => {
-        const status = step.Status?.toLowerCase();
-        const isDone = status === 'done';
-        const isPending = status === 'pending';
+        const isDone = step.Status?.toLowerCase() === 'done';
+        const isPending = step.Status?.toLowerCase() === 'pending';
 
-        // Show Actual if exists, else Planned
-        const dateToShow = step.Actual || step.Planned || '';
-        const displayDate = dateToShow ? new Date(dateToShow).toLocaleDateString() : '—';
+        // Display actual date if available, else planned
+        const displayDate = step.Actual || step.Planned || '';
+        const dateLabel = displayDate ? new Date(displayDate).toLocaleDateString() : '—';
 
         return (
           <div
             key={i}
-            className={`px-3 py-2 rounded-full text-white whitespace-nowrap
-              ${isDone ? 'bg-green-600' : isPending ? 'bg-yellow-500' : 'bg-gray-400'}`}
+            className={`rounded-xl px-4 py-2 shadow-sm border text-sm font-medium flex flex-col items-start min-w-[180px] transition-all duration-200
+              ${isDone ? 'bg-green-100 border-green-300 text-green-800' :
+                isPending ? 'bg-yellow-100 border-yellow-300 text-yellow-800' :
+                  'bg-gray-100 border-gray-300 text-gray-700'}`}
           >
-            <strong>{step.Step}:</strong> {displayDate}
+            <div className="mb-1 font-semibold">{step.Step}</div>
+            <div className="text-xs">📅 {dateLabel}</div>
+            <div className="text-xs">Status: {step.Status || 'N/A'}</div>
           </div>
         );
       })}
