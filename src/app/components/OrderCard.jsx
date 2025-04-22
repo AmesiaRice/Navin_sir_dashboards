@@ -36,23 +36,24 @@ export default function OrderCard({ order }) {
   };
 
   return (
-    <div className="border border-gray-200 p-6 mb-6 rounded-xl shadow-md bg-white hover:shadow-lg transition-all duration-300">
-      <div className="flex justify-between items-start mb-4">
+    <div className="border border-gray-200 p-5 md:p-6 mb-6 rounded-xl shadow-md bg-white hover:shadow-lg transition-all duration-300">
+      {/* Top: Header Info */}
+      <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4 mb-4">
         <div>
-          <h2 className="text-xl font-bold text-gray-800">
+          <h2 className="text-lg sm:text-xl font-bold text-gray-800">
             {order.PartyName} – <span className="text-blue-700">{order.OrderID}</span>
           </h2>
-          <p className="text-sm text-gray-600">Party ID: {order.PartyUniqueID}</p>
+          <p className="text-sm text-gray-600 mt-1 sm:mt-0">Party ID: {order.PartyUniqueID}</p>
         </div>
 
         {isDelivered && (
-          <div className="flex items-center gap-3">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3">
             <span className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">
               ✅ Delivered
             </span>
             <button
               onClick={handleDownloadPDF}
-              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-1.5 rounded-md text-sm font-semibold shadow"
+              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-semibold shadow"
             >
               ⬇ Download PDF
             </button>
@@ -60,13 +61,15 @@ export default function OrderCard({ order }) {
         )}
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm text-gray-700 mb-4">
+      {/* Middle: Grid Info */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 text-sm text-gray-700 mb-4">
         <p><strong>Country:</strong> {order.Country}</p>
         <p><strong>Contact:</strong> {order.ContactNo}</p>
         <p><strong>Brand:</strong> {order.BrandName}</p>
         <p><strong>Quantity:</strong> {order.Quantity}</p>
       </div>
 
+      {/* Bottom: Progress Bar */}
       <ProgressBar steps={order.Steps} />
     </div>
   );

@@ -6,44 +6,63 @@ import { usePathname } from 'next/navigation';
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const pathname = usePathname(); // ✅ Get current route
+  const pathname = usePathname();
 
   const linkClass = (path) =>
     pathname === path
-      ? "text-blue-600 font-semibold" // Active
-      : "text-gray-700";              // Inactive
+      ? 'text-blue-600 font-semibold'
+      : 'text-gray-700 hover:text-blue-600 transition-colors';
+
+  const navItems = [
+    { name: 'Total', path: '/' },
+    { name: 'Pending', path: '/pages/pending' },
+    { name: 'Complete', path: '/pages/complete' },
+  ];
 
   return (
-    <nav className="bg-white shadow-md w-full z-10">
-      <div className="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
-        <div className="text-xl font-bold text-blue-600">
-          AmasiaRice
+    <nav className="bg-white shadow-md w-full z-50">
+      <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+        {/* Logo */}
+        <div className="text-2xl font-extrabold text-blue-700">AmasiaRice</div>
+
+        {/* Desktop Menu */}
+        <div className="hidden md:flex space-x-6 text-sm font-medium">
+          {navItems.map((item) => (
+            <Link key={item.path} href={item.path} className={linkClass(item.path)}>
+              {item.name}
+            </Link>
+          ))}
         </div>
 
-        {/* Desktop Links */}
-        <div className="hidden md:flex space-x-6 font-medium">
-          <Link href="/" className={linkClass("/")}>Total</Link>
-          <Link href="/pages/pending" className={linkClass("/pages/pending")}>Pending</Link>
-          <Link href="/pages/complete" className={linkClass("/pages/complete")}>Complete</Link>
-        </div>
-
-        {/* Mobile Menu Toggle */}
+        {/* Mobile Menu Button */}
         <button
-          className="md:hidden text-gray-700 focus:outline-none"
+          className="md:hidden text-gray-800 text-2xl focus:outline-none"
           onClick={() => setMenuOpen(!menuOpen)}
+          aria-label="Toggle menu"
         >
-          ☰
+          {menuOpen ? '✖' : '☰'}
         </button>
       </div>
 
       {/* Mobile Links */}
-      {menuOpen && (
-        <div className="md:hidden px-4 pb-4 space-y-2 font-medium flex flex-col">
-          <Link href="/" className={linkClass("/")} onClick={() => setMenuOpen(false)}>Total</Link>
-          <Link href="/pages/pending" className={linkClass("/pages/pending")} onClick={() => setMenuOpen(false)}>Pending</Link>
-          <Link href="/pages/complete" className={linkClass("/pages/complete")} onClick={() => setMenuOpen(false)}>Complete</Link>
+      <div
+        className={`md:hidden overflow-hidden transition-all duration-300 ${
+          menuOpen ? 'max-h-96 py-3 px-4' : 'max-h-0'
+        }`}
+      >
+        <div className="flex flex-col space-y-3 font-medium text-sm">
+          {navItems.map((item) => (
+            <Link
+              key={item.path}
+              href={item.path}
+              className={linkClass(item.path)}
+              onClick={() => setMenuOpen(false)}
+            >
+              {item.name}
+            </Link>
+          ))}
         </div>
-      )}
+      </div>
     </nav>
   );
 }

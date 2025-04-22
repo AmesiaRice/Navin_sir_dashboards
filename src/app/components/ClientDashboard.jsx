@@ -26,49 +26,43 @@ export default function ClientDashboard() {
     } else {
       setMatchedOrders([]);
       setError('⚠️ No orders found for that ID.');
-      setTimeout(() => {
-        setError('');
-      }, 2000);
+      setTimeout(() => setError(''), 2500);
     }
   };
 
   const dataToDisplay = inputID.trim() && matchedOrders.length > 0 ? matchedOrders : allOrders;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-100 to-white p-6">
+    <div className="min-h-screen bg-gradient-to-br from-gray-100 to-white p-4 md:p-6">
       <div className="max-w-6xl mx-auto">
-        {/* <h1 className="text-3xl font-bold text-blue-700 mb-6 text-center">📦 Track Your Export Orders</h1> */}
+        {/* <h1 className="text-2xl sm:text-3xl font-bold text-blue-700 mb-6 text-center">📦 Track Your Export Orders</h1> */}
 
-        {/* Search Bar */}
-        <div className="flex flex-col md:flex-row gap-4 mb-6 justify-center">
+        {/* 🔍 Search */}
+        <div className="flex flex-col md:flex-row gap-4 mb-6 justify-center items-center">
           <input
             type="text"
             value={inputID}
             onChange={(e) => setInputID(e.target.value)}
-            onKeyDown={(e)=>{
-              if(e.key==='Enter'){
-                handleSearch();
-              }
-            }}
+            onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
             placeholder="Enter Order ID or Party Unique ID"
-            className="border border-gray-300 px-5 py-3 rounded-lg w-full md:w-2/3 shadow-sm focus:ring-2 focus:ring-blue-300 outline-none"
+            className="w-full md:w-2/3 border border-gray-300 px-5 py-3 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-300 outline-none text-sm sm:text-base"
           />
           <button
             onClick={handleSearch}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium shadow"
+            className="w-full md:w-auto bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold shadow text-sm sm:text-base"
           >
             🔍 Search
           </button>
         </div>
 
-        {/* Error */}
+        {/* ⚠️ Error */}
         {error && (
-          <div className="bg-red-100 border border-red-300 text-red-700 px-4 py-3 rounded mb-6 text-center">
+          <div className="bg-red-100 border border-red-300 text-red-700 px-4 py-3 rounded mb-6 text-center text-sm sm:text-base">
             {error}
           </div>
         )}
 
-        {/* Results */}
+        {/* ✅ Results */}
         {dataToDisplay.length > 0 ? (
           <div className="space-y-6">
             {dataToDisplay.map(order => (
@@ -76,7 +70,7 @@ export default function ClientDashboard() {
             ))}
           </div>
         ) : (
-          <p className="text-center text-gray-500">No orders to display.</p>
+          <p className="text-center text-gray-500 text-sm sm:text-base">No orders to display.</p>
         )}
       </div>
     </div>
