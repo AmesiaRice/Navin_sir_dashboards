@@ -21,13 +21,13 @@ export default function AdminDashboard() {
 
   const filtered = orders.filter(order => {
     const matchCountry = filters.country ? order.Country.toLowerCase() === filters.country.toLowerCase() : true;
-    const matchBrand = filters.brand ? order["Brand Name"].toLowerCase() === filters.brand.toLowerCase() : true;
-    
+    const matchBrand = filters.brand ? order.BrandName.toLowerCase() === filters.brand.toLowerCase() : true;
+
     const searchText = filters.search.toLowerCase();
     const matchSearch = searchText === '' || (
-      (order["Party Name"] || '').toLowerCase().includes(searchText) ||
-      (order["Order ID"] || '').toLowerCase().includes(searchText) ||
-      (order["Contact No"] || '').toString().includes(searchText)
+      (order.PartyName || '').toLowerCase().includes(searchText) ||
+      (order.OrderID || '').toLowerCase().includes(searchText) ||
+      (order.ContactNo || '').toString().includes(searchText)
     );
 
     return matchCountry && matchBrand && matchSearch;
@@ -40,7 +40,7 @@ export default function AdminDashboard() {
       <FilterBar filters={filters} setFilters={setFilters} />
       {filtered.length > 0 ? (
         filtered.map(order => (
-          <OrderCard key={order['Order ID']} order={order} />
+          <OrderCard key={order.OrderID} order={order} />
         ))
       ) : (
         <p>No matching orders found.</p>

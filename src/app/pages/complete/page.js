@@ -5,39 +5,30 @@ import OrderCard from '../../components/OrderCard';
 import Navbar from '../../components/Navbar';
 
 export default function Complete() {
-  const [allOrders, setAllOrders] = useState([]);
-  const [completeOrder,setCompleteOrder]= useState([]);
+  const [completeOrder, setCompleteOrder] = useState([]);
 
-  useEffect(()=>{
-    const steps = [
-      "Order confirmation",
-      "Packing Material Received",
-      "Packing of goods",
-      "Dispatch to port",
-      "Receiving of goods at port",
-      "Vessel Dispatch",
-      "Goods received at party's port"
-    ];
+  useEffect(() => {
+    const complete = mockOrders.filter(order => {
+      const isDelivered = order.Steps?.every(
+        step => step.Status?.toLowerCase() === 'done'
+      );
+      return isDelivered; // Only take orders that are fully delivered
+    });
 
-    const complete = mockOrders.filter(order=>{
-      const isDelivered = steps.every(
-        step=> order[`Status (${step})` || ''].toLowerCase()==="done"
-      )
-      return isDelivered;
-    })
-    setCompleteOrder(complete)
-  },[])
+    setCompleteOrder(complete);
+  }, []);
 
   return (
     <div className="p-6">
-        <Navbar/>
-      {/* ✅ Display All Matching Orders */}
-      {completeOrder.length > 0 && (
+      <Navbar />
+      {completeOrder.length > 0 ? (
         <div>
           {completeOrder.map(order => (
-            <OrderCard key={order["Order ID"]} order={order} />
+            <OrderCard key={order.OrderID} order={order} />
           ))}
         </div>
+      ) : (
+        <p>No completed orders found.</p>
       )}
     </div>
   );

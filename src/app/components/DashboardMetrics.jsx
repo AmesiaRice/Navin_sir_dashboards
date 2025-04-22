@@ -2,11 +2,11 @@ import React from 'react';
 
 export default function DashboardMetrics({ orders }) {
   const total = orders.length;
-  const delivered = orders.filter(order => 
-    (order["Status (Goods received at party's port)"] || '').toLowerCase() === 'done'
+  const delivered = orders.filter(order =>
+    order.Steps?.[order.Steps.length - 1]?.Status?.toLowerCase() === 'done'
   ).length;
   const pending = total - delivered;
-  const deliveryRate = ((delivered / total) * 100).toFixed(1);
+  const deliveryRate = total > 0 ? ((delivered / total) * 100).toFixed(1) : 0;
 
   return (
     <div className="flex justify-around p-4 bg-gray-100 rounded mb-4">

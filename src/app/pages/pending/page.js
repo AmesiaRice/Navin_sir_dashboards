@@ -8,20 +8,9 @@ export default function Pending() {
   const [pendingOrder, setPendingOrders] = useState([]);
 
   useEffect(() => {
-    // Filter only the orders which are NOT delivered
-    const steps = [
-      "Order confirmation",
-      "Packing Material Received",
-      "Packing of goods",
-      "Dispatch to port",
-      "Receiving of goods at port",
-      "Vessel Dispatch",
-      "Goods received at party's port"
-    ];
-
     const pending = mockOrders.filter(order => {
-      const isDelivered = steps.every(
-        step => (order[`Status (${step})`] || '').toLowerCase() === 'done'
+      const isDelivered = order.Steps?.every(
+        step => step.Status?.toLowerCase() === 'done'
       );
       return !isDelivered; // Only take orders that are NOT delivered
     });
@@ -31,20 +20,16 @@ export default function Pending() {
 
   return (
     <div className="p-6">
-        <Navbar/>
-      {/* ✅ Display All Matching Orders */}
-      {pendingOrder.length > 0 && (
-        <div>
-           {pendingOrder.length > 0 ? (
+      <Navbar />
+      
+      {pendingOrder.length > 0 ? (
         <div>
           {pendingOrder.map(order => (
-            <OrderCard key={order["Order ID"]} order={order} />
+            <OrderCard key={order.OrderID} order={order} />
           ))}
         </div>
       ) : (
         <p>No pending orders found.</p>
-      )}
-        </div>
       )}
     </div>
   );

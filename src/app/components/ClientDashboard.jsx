@@ -9,17 +9,16 @@ export default function ClientDashboard() {
   const [allOrders, setAllOrders] = useState([]);
   const [error, setError] = useState('');
 
-  useEffect(()=>{
-   setAllOrders(mockOrders)
-  },[])
+  useEffect(() => {
+    setAllOrders(mockOrders);
+  }, []);
 
   const handleSearch = () => {
     const search = inputID.trim().toLowerCase();
 
-    // Match by Order ID or all orders with same Party Unique ID
     const matches = mockOrders.filter(order =>
-      (order["Order ID"] || '').toLowerCase() === search ||
-      (order["Party unqiue ID"] || '').toLowerCase() === search
+      (order.OrderID || '').toLowerCase() === search ||
+      (order.PartyUniqueID || '').toLowerCase() === search
     );
 
     if (matches.length > 0) {
@@ -31,7 +30,7 @@ export default function ClientDashboard() {
     }
   };
 
-  const dataToDisplay = inputID.trim() && matchedOrders.length>0 ? matchedOrders : allOrders;
+  const dataToDisplay = inputID.trim() && matchedOrders.length > 0 ? matchedOrders : allOrders;
 
   return (
     <div className="p-6">
@@ -61,7 +60,7 @@ export default function ClientDashboard() {
       {dataToDisplay.length > 0 && (
         <div>
           {dataToDisplay.map(order => (
-            <OrderCard key={order["Order ID"]} order={order} />
+            <OrderCard key={order.OrderID} order={order} />
           ))}
         </div>
       )}
