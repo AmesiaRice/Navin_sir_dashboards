@@ -61,10 +61,35 @@ export default function OrderCard({ order }) {
         </div>
       </div>
 
+      {/* Responsive Step Progress */}
       <div className="mt-6 pb-4">
-        <div className="relative flex flex-wrap justify-between items-center">
-          <div className="absolute top-5 left-0 right-0 h-1 bg-gray-300 z-0" />
+        <div className="md:hidden flex flex-col gap-6">
+          {order.Steps.map((step, idx) => {
+            const isDone = step.Status.toLowerCase() === 'done';
+            const isPending = step.Status.toLowerCase() === 'pending';
+            const icon = isDone ? (
+              <CheckCircle size={20} className="text-green-500" />
+            ) : (
+              <Clock size={20} className="text-yellow-500" />
+            );
+            return (
+              <div key={idx} className="relative border-l-4 border-blue-200 pl-4">
+                {/* {shouldShowTruck && lastDoneIndex === idx && (
+                  <Truck size={20} className="absolute -left-6 text-blue-600 animate-bounce" />
+                )} */}
+                <div className="text-sm font-semibold text-gray-800">{step.Step}</div>
+                <div className="text-xs text-gray-500">{step.Actual ? new Date(step.Actual).toLocaleDateString() : 'Planned'}</div>
+                <div className={`text-xs font-medium ${
+                  isDone ? 'text-green-600' : isPending ? 'text-yellow-600' : 'text-gray-400'
+                }`}>{step.Status}</div>
+              </div>
+            );
+          })}
+        </div>
 
+        {/* Desktop Layout */}
+        <div className="hidden md:flex relative justify-between items-center">
+          <div className="absolute top-5 left-0 right-0 h-1 bg-gray-300 z-0" />
           {shouldShowTruck && (
             <div
               className="absolute -top-0 z-20 transition-all duration-500 ease-in-out"
@@ -76,7 +101,6 @@ export default function OrderCard({ order }) {
               <Truck size={28} className="text-blue-600 animate-bounce" />
             </div>
           )}
-
           {order.Steps.map((step, idx) => {
             const isDone = step.Status.toLowerCase() === 'done';
             const isPending = step.Status.toLowerCase() === 'pending';
@@ -85,7 +109,6 @@ export default function OrderCard({ order }) {
             ) : (
               <Clock size={18} className="text-yellow-500" />
             );
-
             return (
               <div key={idx} className="relative flex flex-col items-center text-center z-10 w-[120px]">
                 <div className="mb-1">{icon}</div>
