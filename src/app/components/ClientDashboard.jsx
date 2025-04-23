@@ -38,7 +38,8 @@ export default function ClientDashboard() {
   const handleSearch = () => {
     const search = inputID.trim().toLowerCase();
     const matches = allOrders.filter(order =>
-      (order.OrderID || '').toLowerCase() === search
+      (order["Order ID"] || '').toLowerCase() === search ||
+      (order["Party unqiue ID"] || '').toLowerCase() === search
     );
 
     if (matches.length > 0) {

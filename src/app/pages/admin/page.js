@@ -28,8 +28,10 @@ export default function AdminDashboard() {
     const matchSearch = searchText === '' || (
       (order.PartyName || '').toLowerCase().includes(searchText) ||
       (order.OrderID || '').toLowerCase().includes(searchText) ||
+      (order.PartyUniqueID || '').toLowerCase().includes(searchText) ||
       (order.ContactNo || '').toString().includes(searchText)
     );
+
 
     return matchCountry && matchBrand && matchSearch;
   });
