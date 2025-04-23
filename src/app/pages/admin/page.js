@@ -1,6 +1,7 @@
 'use client'
 import React, { useState, useEffect } from 'react';
 import mockOrders from '../../mock.js';
+import { getSheetData } from '../../lib/sheetData.js';
 import OrderCard from '../../components/OrderCard';
 import DashboardMetrics from '../../components/DashboardMetrics';
 import FilterBar from '../../components/FilterBar';
@@ -14,9 +15,9 @@ export default function AdminDashboard() {
   });
 
   useEffect(() => {
-    setTimeout(() => {
-      setOrders(mockOrders);
-    }, 500);
+    getSheetData().then(({ orders }) => {
+      setOrders(orders);
+    });
   }, []);
 
   const filtered = orders.filter(order => {
@@ -43,7 +44,7 @@ export default function AdminDashboard() {
           <OrderCard key={order.OrderID} order={order} />
         ))
       ) : (
-        <p>No matching orders found.</p>
+        <p>Loading...</p>
       )}
     </div>
   );
