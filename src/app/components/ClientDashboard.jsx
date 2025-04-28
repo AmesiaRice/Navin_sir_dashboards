@@ -44,15 +44,15 @@ export default function ClientDashboard() {
   return (
     <div className=" bg-gradient-to-br from-gray-100 to-gray-300 p-6">
       <div className="max-w-7xl mx-auto">
-        <h1 className="text-2xl font-bold text-center mb-8 text-blue-700">
+        {/* <h1 className="text-2xl font-bold text-center mb-8 text-blue-700">
           📊 Client Dashboard
-        </h1>
+        </h1> */}
 
         {/* 3 Cards Section */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
           {/* Total Orders */}
           <Link href={"/pages/total"}>
-            <div className="bg-white shadow-md rounded-xl p-6 flex flex-col items-center hover:shadow-lg transition">
+            <div className="bg-white shadow-md rounded-xl p-3 flex flex-col items-center hover:shadow-lg transition">
               <h2 className="text-xl font-bold text-gray-800 mb-2">
                 📦 Total Orders
               </h2>
@@ -64,7 +64,7 @@ export default function ClientDashboard() {
 
           {/* Pending Orders */}
           <Link href={"/pages/pending"}>
-            <div className="bg-white shadow-md rounded-xl p-6 flex flex-col items-center hover:shadow-lg transition">
+            <div className="bg-white shadow-md rounded-xl p-3 flex flex-col items-center hover:shadow-lg transition">
               <h2 className="text-xl font-bold text-gray-800 mb-2">
                 ⏳ Pending Orders
               </h2>
@@ -76,7 +76,7 @@ export default function ClientDashboard() {
 
           {/* Completed Orders */}
           <Link href={"/pages/complete"}>
-            <div className="bg-white shadow-md rounded-xl p-6 flex flex-col items-center hover:shadow-lg transition">
+            <div className="bg-white shadow-md rounded-xl p-3 flex flex-col items-center hover:shadow-lg transition">
               <h2 className="text-xl font-bold text-gray-800 mb-2">
                 ✅ Completed Orders
               </h2>
