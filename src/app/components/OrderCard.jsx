@@ -1,6 +1,5 @@
 'use client'
 import React from 'react';
-import jsPDF from 'jspdf';
 import { Download, CheckCircle, Clock, Truck } from 'lucide-react';
 
 export default function OrderCard({ order }) {
@@ -8,34 +7,15 @@ export default function OrderCard({ order }) {
   const lastDoneIndex = order.Steps?.map(s => s.Status.toLowerCase()).lastIndexOf('done');
   const shouldShowTruck = !isDelivered && lastDoneIndex !== -1;
 
+  // ✅ Download the PDF from App Script
   const handleDownloadPDF = () => {
-    const doc = new jsPDF();
-    doc.setFontSize(14);
-    doc.text(`Export Order Summary`, 10, 10);
-    doc.setFontSize(12);
-    doc.text(`Party Name: ${order.PartyName}`, 10, 20);
-    doc.text(`Party ID: ${order.PartyUniqueID}`, 10, 30);
-    doc.text(`Order ID: ${order.OrderID}`, 10, 40);
-    doc.text(`Country: ${order.Country}`, 10, 50);
-    doc.text(`Brand: ${order.BrandName}`, 10, 60);
-    doc.text(`Quantity: ${order.Quantity}`, 10, 70);
-
-    let y = 80;
-    doc.text(`Order Progress:`, 10, y);
-    order.Steps.forEach((step, index) => {
-      y += 10;
-      doc.text(`${index + 1}. ${step.Step}`, 12, y);
-      y += 6;
-      doc.text(`Status: ${step.Status}`, 20, y);
-      doc.text(`Planned: ${new Date(step.Planned).toLocaleDateString()}`, 70, y);
-      doc.text(`Actual: ${step.Actual ? new Date(step.Actual).toLocaleDateString() : '—'}`, 130, y);
-    });
-
-    doc.save(`${order.OrderID}_ExportOrder.pdf`);
+    const apiURL = `/api/download?orderId=${encodeURIComponent(order.OrderID)}`;
+    window.open(apiURL, '_blank');
   };
+  
 
   return (
-    <div className="bg-white rounded-xl shadow-md px-5 py-6 mb-6 w-full transition-all hover:shadow-lg relative">
+    <div className="bg-gradient-to-br from-white to-gray-200 rounded-xl shadow-md px-5 py-6 mb-6 w-full transition-all hover:shadow-lg relative">
       <div className="flex justify-between items-center mb-4">
         <div className="text-xs text-gray-400 font-medium tracking-wide">{order.PartyUniqueID}</div>
         {isDelivered && (
@@ -48,16 +28,17 @@ export default function OrderCard({ order }) {
         )}
       </div>
 
+      {/* Basic Info */}
       <div className="flex flex-col md:flex-row md:justify-between md:items-center">
         <div>
           <h2 className="text-lg font-semibold text-gray-800">{order.PartyName}</h2>
           <p className="text-xs text-gray-500 mt-1">Order ID: {order.OrderID}</p>
+          <p className="text-xs text-gray-500 mt-1">Invoice No: {order.InvoiceNumber}</p>
         </div>
         <div className="mt-2 md:mt-0 flex flex-wrap gap-3 text-xs text-gray-600">
           <span><strong>Country:</strong> {order.Country}</span>
           <span><strong>Brand:</strong> {order.BrandName}</span>
-          <span><strong>Qty:</strong> {order.Quantity}</span>
-          <span><strong>Contact:</strong> {order.ContactNo}</span>
+          <span><strong>Qty(MT):</strong> {order.Quantity}</span>
         </div>
       </div>
 
@@ -74,9 +55,6 @@ export default function OrderCard({ order }) {
             );
             return (
               <div key={idx} className="relative border-l-4 border-blue-200 pl-4">
-                {/* {shouldShowTruck && lastDoneIndex === idx && (
-                  <Truck size={20} className="absolute -left-6 text-blue-600 animate-bounce" />
-                )} */}
                 <div className="text-sm font-semibold text-gray-800">{step.Step}</div>
                 <div className="text-xs text-gray-500">{step.Actual ? new Date(step.Actual).toLocaleDateString() : 'Planned'}</div>
                 <div className={`text-xs font-medium ${

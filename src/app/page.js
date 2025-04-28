@@ -1,6 +1,6 @@
 import React from 'react'
-import ClientDashboard from './components/ClientDashboard'
 import Navbar from './components/Navbar'
+import ClientDashboard from './components/ClientDashboard'
 
 const App = () => {
   return (

@@ -14,13 +14,14 @@ export default function Navbar() {
       : 'text-gray-700 hover:text-blue-600 transition-colors';
 
   const navItems = [
-    { name: 'Total', path: '/' },
+    { name: 'Dashboard', path: '/' },
+    { name: 'Total', path: '/pages/total' },
     { name: 'Pending', path: '/pages/pending' },
     { name: 'Complete', path: '/pages/complete' },
   ];
 
   return (
-    <nav className="bg-white shadow-md w-full z-50">
+    <nav className="bg-white shadow-md w-full z-50 sticky top-0 left-0">
       <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
         {/* Logo */}
         <div className="text-2xl font-extrabold text-blue-700">AmasiaRice</div>

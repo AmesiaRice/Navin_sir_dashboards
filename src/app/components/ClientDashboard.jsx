@@ -1,97 +1,99 @@
-'use client';
-import React, { useEffect, useState } from 'react';
-import { getSheetData } from '../lib/sheetData';
-import OrderCard from '../components/OrderCard';
-import { useRouter } from 'next/navigation';
+"use client";
+import React, { useEffect, useState } from "react";
+import { getSheetData } from "../lib/sheetData";
+import OrderCard from "../components/OrderCard";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import ClientCharts from "./CLientCharts";
 
 export default function ClientDashboard() {
   const router = useRouter();
-  const [inputID, setInputID] = useState('');
-  const [matchedOrders, setMatchedOrders] = useState([]);
   const [allOrders, setAllOrders] = useState([]);
-  const [orders, setOrders] = useState([]);
-  const [partyID, setPartyID] = useState('');
-  const [error, setError] = useState('');
+  const [partyID, setPartyID] = useState("");
+  const [loading, setLoading] = useState(true);
 
-  // Step 1: Load data + validate login
   useEffect(() => {
-    const storedID = localStorage.getItem('clientPartyID');
+    const storedID = localStorage.getItem("clientPartyID");
     if (!storedID) {
-      router.push('/pages/login');
+      router.push("/pages/login");
       return;
     }
     setPartyID(storedID);
 
     getSheetData().then(({ orders }) => {
-      setOrders(orders);
+      const filtered = orders.filter(
+        (order) => order.PartyUniqueID === storedID
+      );
+      setAllOrders(filtered);
+      setLoading(false);
     });
   }, [router]);
 
-  // Step 2: When orders are fetched & partyID available → filter
-  useEffect(() => {
-    if (orders.length > 0 && partyID) {
-      const filtered = orders.filter(order => order.PartyUniqueID === partyID);
-      setAllOrders(filtered);
-    }
-  }, [orders, partyID]);
+  if (loading) {
+    return <div className="text-center py-10 text-gray-500">Loading...</div>;
+  }
 
-  const handleSearch = () => {
-    const search = inputID.trim().toLowerCase();
-    const matches = allOrders.filter(order =>
-      (order["Order ID"] || '').toLowerCase() === search ||
-      (order["Party unqiue ID"] || '').toLowerCase() === search
-    );
+  const pendingOrders = allOrders.filter((order) =>
+    order.Steps?.some((step) => step.Status.toLowerCase() !== "done")
+  );
 
-    if (matches.length > 0) {
-      setMatchedOrders(matches);
-      setError('');
-    } else {
-      setMatchedOrders([]);
-      setError('⚠️ No orders found for that ID.');
-      setTimeout(() => setError(''), 2500);
-    }
-  };
-
-  const dataToDisplay = inputID.trim() && matchedOrders.length > 0 ? matchedOrders : allOrders;
+  const completedOrders = allOrders.filter((order) =>
+    order.Steps?.every((step) => step.Status.toLowerCase() === "done")
+  );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-100 to-white p-4 md:p-6">
-      <div className="max-w-6xl mx-auto">
-        {/* 🔍 Search */}
-        <div className="flex flex-col md:flex-row gap-4 mb-6 justify-center items-center">
-          <input
-            type="text"
-            value={inputID}
-            onChange={(e) => setInputID(e.target.value)}
-            onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-            placeholder="Enter Order ID"
-            className="w-full md:w-2/3 border border-gray-300 px-5 py-3 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-300 outline-none text-sm sm:text-base"
-          />
-          <button
-            onClick={handleSearch}
-            className="w-full md:w-auto bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold shadow text-sm sm:text-base"
-          >
-            🔍 Search
-          </button>
+    <div className=" bg-gradient-to-br from-gray-100 to-gray-300 p-6">
+      <div className="max-w-7xl mx-auto">
+        <h1 className="text-2xl font-bold text-center mb-8 text-blue-700">
+          📊 Client Dashboard
+        </h1>
+
+        {/* 3 Cards Section */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+          {/* Total Orders */}
+          <Link href={"/pages/total"}>
+            <div className="bg-white shadow-md rounded-xl p-6 flex flex-col items-center hover:shadow-lg transition">
+              <h2 className="text-xl font-bold text-gray-800 mb-2">
+                📦 Total Orders
+              </h2>
+              <p className="text-3xl font-extrabold text-blue-600">
+                {allOrders.length}
+              </p>
+            </div>
+          </Link>
+
+          {/* Pending Orders */}
+          <Link href={"/pages/pending"}>
+            <div className="bg-white shadow-md rounded-xl p-6 flex flex-col items-center hover:shadow-lg transition">
+              <h2 className="text-xl font-bold text-gray-800 mb-2">
+                ⏳ Pending Orders
+              </h2>
+              <p className="text-3xl font-extrabold text-yellow-500">
+                {pendingOrders.length}
+              </p>
+            </div>
+          </Link>
+
+          {/* Completed Orders */}
+          <Link href={"/pages/complete"}>
+            <div className="bg-white shadow-md rounded-xl p-6 flex flex-col items-center hover:shadow-lg transition">
+              <h2 className="text-xl font-bold text-gray-800 mb-2">
+                ✅ Completed Orders
+              </h2>
+              <p className="text-3xl font-extrabold text-green-600">
+                {completedOrders.length}
+              </p>
+            </div>
+          </Link>
         </div>
 
-        {/* ⚠️ Error */}
-        {error && (
-          <div className="bg-red-100 border border-red-300 text-red-700 px-4 py-3 rounded mb-6 text-center text-sm sm:text-base">
-            {error}
-          </div>
-        )}
-
-        {/* ✅ Results */}
-        {dataToDisplay.length > 0 ? (
-          <div className="space-y-6">
-            {dataToDisplay.map(order => (
-              <OrderCard key={order.OrderID} order={order} />
-            ))}
-          </div>
-        ) : (
-          <p className="text-center text-gray-500 text-sm sm:text-base">No orders to display.</p>
-        )}
+        {/* List All Orders */}
+        {/* <div className="space-y-6">
+          {allOrders.map(order => (
+            <OrderCard key={order.OrderID} order={order} />
+          ))}
+        </div> */}
+        <ClientCharts/>
       </div>
     </div>
   );

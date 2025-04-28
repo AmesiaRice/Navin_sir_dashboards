@@ -43,7 +43,7 @@ export default function Complete() {
       <Navbar />
 
       {completeOrder.length > 0 ? (
-        <div className="space-y-6">
+        <div className="space-y-6 p-6">
           {completeOrder.map(order => (
             <OrderCard key={order.OrderID} order={order} />
           ))}
