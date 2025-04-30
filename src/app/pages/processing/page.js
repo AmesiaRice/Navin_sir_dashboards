@@ -5,7 +5,7 @@ import OrderCard from '../../components/OrderCard';
 import Navbar from '../../components/Navbar';
 import { useRouter } from 'next/navigation';
 
-export default function process() {
+export default function Process() {
   const [orders, setOrders] = useState([]);
   const [processOrder, setprocessOrders] = useState([]);
   const [partyID, setPartyID] = useState('');
