@@ -44,7 +44,7 @@ export default function AdminDashboard() {
       {filtered.length > 0 ? (
         filtered.map((order,index) => (
           <OrderCard key={`${order.OrderID}-${index}`} order={order} />
-        ))
+        )) 
       ) : (
         <p>Loading...</p>
       )}
