@@ -56,9 +56,9 @@ export default function ClientDashboard() {
   return (
     <div className=" bg-gradient-to-br from-gray-100 to-gray-300 p-6">
       <div className="max-w-7xl mx-auto">
-        {/* <h1 className="text-2xl font-bold text-center mb-8 text-blue-700">
+        <h1 className="text-2xl font-bold text-center mb-8 text-blue-700">
           📊 Client Dashboard
-        </h1> */}
+        </h1>
 
         {/* 3 Cards Section */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
