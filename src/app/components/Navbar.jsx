@@ -16,8 +16,9 @@ export default function Navbar() {
   const navItems = [
     { name: 'Dashboard', path: '/' },
     { name: 'Total', path: '/pages/total' },
-    { name: 'Pending', path: '/pages/pending' },
+    { name: 'Processing', path: '/pages/processing' },
     { name: 'Complete', path: '/pages/complete' },
+    { name: 'Pending', path: '/pages/pending' },
   ];
 
   return (

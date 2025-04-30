@@ -8,7 +8,7 @@ export async function GET(req) {
     return NextResponse.json({ error: 'Order ID missing' }, { status: 400 });
   }
 
-  const appScriptURL = 'https://script.google.com/macros/s/AKfycbzuphy6K3pcWWtCP2CplrzRCaF9UWUuha7gLOmZH24wNDM2hWEq9XaFAPbFUyBU6jEr/exec';
+  const appScriptURL = 'https://script.google.com/macros/s/AKfycbyISZRmFKNYeDFkdsQ4Ep0DkMRMN2mzZjYsE8l5OJF5tmthr7eMntnN1iXRbAFxb13z/exec';
 
   try {
     const response = await fetch(`${appScriptURL}?orderId=${encodeURIComponent(orderId)}`);

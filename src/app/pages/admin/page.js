@@ -42,8 +42,8 @@ export default function AdminDashboard() {
       <DashboardMetrics orders={filtered} />
       <FilterBar filters={filters} setFilters={setFilters} />
       {filtered.length > 0 ? (
-        filtered.map(order => (
-          <OrderCard key={order.OrderID} order={order} />
+        filtered.map((order,index) => (
+          <OrderCard key={`${order.OrderID}-${index}`} order={order} />
         ))
       ) : (
         <p>Loading...</p>
